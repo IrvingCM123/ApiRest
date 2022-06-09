@@ -1,7 +1,7 @@
 import express from  'express';
-import config from './Connection/config.mjs';
+import config from './Connection/config.js';
 import cors from "cors";
-import routes from "./Connection/Routes/routes.mjs";
+import routes from "./Connection/Routes/routes.js";
 import morgan from "morgan";
 
 const app = express()

@@ -10,33 +10,9 @@ var _express = require("express");
 var _controlador = require("../Controllers/controlador.js");
 
 var router = (0, _express.Router)();
-var books = []; // Enlazar páginas para navegar
-
+var books = [];
 router.get("/", function (req, res) {
-  res.render("Index.ejs");
-});
-router.get("/Catalogo", function (req, res) {
-  res.render("Catalogo.ejs");
-});
-router.get("/CajaComentario", function (req, res) {
-  res.render("Comentarios.ejs");
-});
-router.get("/MandarInfo", function (req, res) {
-  res.render("MandarIinfo.ejs");
-});
-router.get("/Glosario", function (req, res) {
-  res.render("Glosario.ejs"), {
-    newInfo: newInfo
-  };
-});
-router.get("/Prueba", function (req, res) {
-  res.render("Prueba.ejs");
-});
-router.get("/Mostrar", function (req, res) {
-  res.render("Mostrar.ejs");
-});
-router.get("/Catalogo/Glosario", function (req, res) {
-  res.render("Glosario_A.ejs");
+  console.log("Conectado");
 });
 router.get("/", function (req, res) {
   res.render('Mostrar.ejs', {
@@ -72,7 +48,7 @@ router.post("/MandarInfo", _controlador.AltaInformacion, function (req, res) {
 
   res.render("/MandarInfo");
 });
-router.get("/Servidor/MostrarUsuarios", _controlador.verUsuarios); //GET = Obtener información
+router.get("/Servidor/MostrarUsuarios/:Id", _controlador.verUsuarios); //GET = Obtener información
 
 router.post("/Servidor", _controlador.AltaUsuario);
 router.get("/Servidor/count", _controlador.ContarUsuario);

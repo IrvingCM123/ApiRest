@@ -5,6 +5,6 @@ export const querys = {
  EliminarUsuario: "DELETE FROM Usuarios WHERE IDUsuario = @Id",
  ContarUsuarios: "SELECT COUNT(*) FROM Usuarios",
  ActualizarUsuario: "UPDATE Usuarios SET Nombre_Usuario = @Nombre, Apellido_Usuario = @Apellido, Correo_Electronico = @Correo, Contraseña = @Contraseña WHERE Correo_Electronico = @CorreoE",
- AltaInformacion: "INSERT INTO Informacion (Letra, Titulo, Descripcion, Imagen) VALUES (@letra, @palabra, @significado, @imagen)",
+ AltaInformacion: "INSERT INTO InformacionGlosario (Letra, Titulo, Descripcion, Imagen) VALUES (@letra, @palabra, @significado, @imagen)",
  VerInformacion : "SELECT * FROM Informacion WHERE Palabra = Palabra",
 };

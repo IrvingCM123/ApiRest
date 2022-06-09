@@ -1,20 +1,29 @@
-import { query } from "express";
-import { getConnection, sql, querys } from "../Database/index.mjs"
-import fs from "fs"
+import { getConnection, sql, querys } from "../Database/index.js"
 
 
 export const verUsuarios = async (req, res) => {
   try {
-    const pool = await getConnection();
-    const result = await pool.request().query(querys.verUsuarios);
-    console.log(result.recordset);
-    res.json(result);
-
+    const pool = await getConnection()
+    const result = await pool
+      .request()
+      .query(querys.verUsuarios)
+    res.send(result.recordsets)
   } catch (error) {
     res.status(500);
     res.send(error.message);
   }
 }
+
+export const EncontrarUsuario = async (req, res) => {
+  const { Id } = req.params;
+  const pool = await getConnection()
+  const result = await pool
+    .request()
+    .input("Id", sql.Int, Id)
+    .query(querys.EncontrarUsuario)
+  res.send(result.recordset[0])
+}
+
 
 export const verInformacion = async (req, res,) => {
   try {
@@ -45,7 +54,7 @@ export const AltaInformacion = async (req, res) => {
       .input("significado", sql.VarChar, significado)
       .input("imagen", sql.VarChar, imagen)
       .query(querys.AltaInformacion);
-    res.json({ letra, palabra, significado, imagen})
+    res.json({ letra, palabra, significado, imagen })
   }
   catch (error) {
     res.status(500);
@@ -76,16 +85,6 @@ export const AltaUsuario = async (req, res) => {
     res.status(500);
     res.send(error.message);
   }
-}
-
-export const EncontrarUsuario = async (req, res) => {
-  const { Id } = req.params;
-  const pool = await getConnection()
-  const result = await pool
-    .request()
-    .input("Id", sql.Int, Id)
-    .query(querys.EncontrarUsuario)
-  res.send(result.recordset[0])
 }
 
 export const EliminarUsuario = async (req, res) => {

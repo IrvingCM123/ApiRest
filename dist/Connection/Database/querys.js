@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.querys = void 0;
 var querys = {
-  verUsuarios: "SELECT * FROM Usuarios",
+  verUsuarios: "SELECT * FROM Usuarios WHERE IDUsuario = @Id",
   RegistrarUsuario: "INSERT INTO Usuarios (Nombre_Usuario, Apellido_Usuario, Correo_Electronico, Contraseña) VALUES (@NombreUsuario, @ApellidoUsuario, @CorreoElectronico, @Contraseña )",
   EncontrarUsuario: "SELECT * FROM Usuarios AS U WHERE U.IDUsuario = @Id",
   EliminarUsuario: "DELETE FROM Usuarios WHERE IDUsuario = @Id",

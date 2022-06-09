@@ -20,19 +20,38 @@ IDUsuario INT IDENTITY NOT NULL,
 Nombre_Usuario VARCHAR(30) NOT NULL,
 Apellido_Usuario VARCHAR(40) NOT NULL,
 Correo_Electronico VARCHAR(40) PRIMARY KEY NOT NULL CHECK(Correo_Electronico LIKE('%@gmail.com')),
-Contraseña VARCHAR(500) NOT NULL,
+Contraseï¿½a VARCHAR(500) NOT NULL,
 Fecha_Creacion DATETIME NULL,
 Fecha_Baja DATETIME NULL
 );
 GO
 
-CREATE TABLE Informacion(
-IdPalabra INT IDENTITY NOT NULL,
+CREATE TABLE InformacionGlosario(
+IdPalabra INT IDENTITY,
+Letra VARCHAR(1) NOT NULL,
 Titulo VARCHAR(30) NOT NULL,
 Descripcion VARCHAR(300) NOT NULL,
-Imagen BINARY NOT NULL
+Imagen VARCHAR(MAX) NOT NULL
 );
 GO
+
+CREATE TABLE Cursos(
+NombreCurso VARCHAR(40),
+ImagenCurso VARCHAR(MAX),
+Descripcion VARCHAR(200)
+);
+
+CREATE TABLE Imagenes(
+Pestaï¿½a VARCHAR(30),
+Imagen VARCHAR(MAX)
+)
+
+CREATE TABLE CursoProgramacion(
+IdTema INT PRIMARY KEY,
+NombreTema VARCHAR(40),
+Informacion VARCHAR(MAX),
+Imagen VARCHAR(MAX)
+)
 
 IF OBJECT_ID('Registrar') IS NOT NULL
 	DROP PROCEDURE dbo.Registrar;
@@ -42,7 +61,7 @@ CREATE PROCEDURE [dbo].[Registrar]
 @Nombre VARCHAR(30),
 @Apellido VARCHAR(40),
 @Correo_Electronico VARCHAR(40),
-@Contraseña VARCHAR(100)
+@Contraseï¿½a VARCHAR(100)
 AS
 BEGIN
 	IF (SELECT COUNT(*) FROM Usuarios AS U WHERE UPPER(@Correo_Electronico) = UPPER(U.Correo_Electronico) ) > 0
@@ -53,11 +72,11 @@ BEGIN
 	BEGIN TRANSACTION
 		BEGIN TRY
 
-		DECLARE @ContraseñaCifrada VARBINARY(500)
-		SET @ContraseñaCifrada = ENCRYPTBYPASSPHRASE(UPPER(@Nombre), @Contraseña);
+		DECLARE @Contraseï¿½aCifrada VARBINARY(500)
+		SET @Contraseï¿½aCifrada = ENCRYPTBYPASSPHRASE(UPPER(@Nombre), @Contraseï¿½a);
 
-		INSERT INTO Usuarios (Nombre_Usuario, Apellido_Usuario, Correo_Electronico, Contraseña, Fecha_Creacion) 
-		VALUES (@Nombre, @Apellido, @Correo_Electronico, @ContraseñaCifrada, GETDATE());
+		INSERT INTO Usuarios (Nombre_Usuario, Apellido_Usuario, Correo_Electronico, Contraseï¿½a, Fecha_Creacion) 
+		VALUES (@Nombre, @Apellido, @Correo_Electronico, @Contraseï¿½aCifrada, GETDATE());
 
 		IF @@TRANCOUNT > 0
 			COMMIT TRANSACTION
@@ -68,7 +87,7 @@ BEGIN
 
 		SELECT ERROR_MESSAGE() AS Mensaje_Error, ERROR_NUMBER() AS Numero_Error;
 
-		PRINT('La transacción ha sido un fracaso');
+		PRINT('La transacciï¿½n ha sido un fracaso');
 
 		IF @@TRANCOUNT > 0
 			 ROLLBACK TRANSACTION
@@ -77,11 +96,11 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID('Mostrar_Contraseña') IS NOT NULL
-	DROP PROCEDURE Mostrar_Contraseña
+IF OBJECT_ID('Mostrar_Contraseï¿½a') IS NOT NULL
+	DROP PROCEDURE Mostrar_Contraseï¿½a
 GO
 
-CREATE PROCEDURE Mostrar_Contraseña
+CREATE PROCEDURE Mostrar_Contraseï¿½a
 @Correo VARCHAR(40)
 AS
 BEGIN
@@ -89,7 +108,7 @@ BEGIN
 	IF (SELECT COUNT(*) FROM Usuarios AS U WHERE UPPER(U.Correo_Electronico) = UPPER(@Correo) ) = 0
 		RAISERROR ('La cuenta no existe', 16, 1)
 	
-	SELECT U.Correo_Electronico AS Correo, CONVERT(VARCHAR(500), DECRYPTBYPASSPHRASE(UPPER(U.Nombre_Usuario), U.Contraseña)) AS Contraseña FROM Usuarios AS U WHERE UPPER(U.Correo_Electronico) = UPPER(@Correo)
+	SELECT U.Correo_Electronico AS Correo, CONVERT(VARCHAR(500), DECRYPTBYPASSPHRASE(UPPER(U.Nombre_Usuario), U.Contraseï¿½a)) AS Contraseï¿½a FROM Usuarios AS U WHERE UPPER(U.Correo_Electronico) = UPPER(@Correo)
 END
 
 GO
@@ -101,7 +120,7 @@ GO
 
 CREATE PROCEDURE BajaCliente
 @Correo VARCHAR(40),
-@Contraseña VARCHAR(100)
+@Contraseï¿½a VARCHAR(100)
 AS
 BEGIN
 	
@@ -114,14 +133,14 @@ BEGIN
 
 	BEGIN TRY
 
-	DECLARE @ContraseñaClara VARCHAR(100);
+	DECLARE @Contraseï¿½aClara VARCHAR(100);
 
-	SELECT @ContraseñaClara = CONVERT(VARCHAR(500), DECRYPTBYPASSPHRASE(UPPER(U.Nombre_Usuario), U.Contraseña)) FROM Usuarios AS U WHERE UPPER(U.Correo_Electronico) = UPPER(@Correo)
+	SELECT @Contraseï¿½aClara = CONVERT(VARCHAR(500), DECRYPTBYPASSPHRASE(UPPER(U.Nombre_Usuario), U.Contraseï¿½a)) FROM Usuarios AS U WHERE UPPER(U.Correo_Electronico) = UPPER(@Correo)
 
 
-	IF (SELECT COUNT(*) FROM Usuarios AS U WHERE U.Contraseña = @ContraseñaClara) = 0
+	IF (SELECT COUNT(*) FROM Usuarios AS U WHERE U.Contraseï¿½a = @Contraseï¿½aClara) = 0
 		BEGIN
-			RAISERROR('La contraseña no coincide', 16, 1);
+			RAISERROR('La contraseï¿½a no coincide', 16, 1);
 		END
 
 	IF (SELECT COUNT(*) FROM Usuarios AS U WHERE (U.Fecha_Baja IS NOT NULL) AND (U.Correo_Electronico = @Correo)) = 0
@@ -133,7 +152,7 @@ BEGIN
 	SET Fecha_Baja = GETDATE(),
 	Fecha_Creacion = NULL;
 	
-	PRINT ('El cliente ha sido dado de baja con éxito');
+	PRINT ('El cliente ha sido dado de baja con ï¿½xito');
 
 	IF @@TRANCOUNT > 0
 		COMMIT TRANSACTION
@@ -144,7 +163,7 @@ BEGIN
 
 		SELECT ERROR_MESSAGE() AS Mensaje_Error, ERROR_NUMBER() AS Numero_Error;
 
-		PRINT('La transacción ha sido un fracaso');
+		PRINT('La transacciï¿½n ha sido un fracaso');
 
 		IF @@TRANCOUNT > 0
 			ROLLBACK TRANSACTION
@@ -154,17 +173,12 @@ BEGIN
 END
 
 
-EXEC Mostrar_Contraseña @Correo = 'Irving@gmail.com'
+EXEC Mostrar_Contraseï¿½a @Correo = 'Irving@gmail.com'
 
-EXEC Registrar @Nombre = 'Irving' , @Apellido = 'Conde', @Correo_Electronico = 'Irving@gmail.com', @Contraseña = 'micontraseña'
+EXEC Registrar @Nombre = 'Irving' , @Apellido = 'Conde', @Correo_Electronico = 'Irving@gmail.com', @Contraseï¿½a = 'micontraseï¿½a'
 
-EXEC BajaCliente @Correo = 'Prueba2@gmail.com', @Contraseña = 'Contraseña2'
+EXEC BajaCliente @Correo = 'Prueba2@gmail.com', @Contraseï¿½a = 'Contraseï¿½a2'
 
 SELECT * FROM Usuarios
 
-SELECT db_name(dbid) as DatabaseName, count(dbid) as NoOfConnections,
-loginame as LoginName
-FROM sys.sysprocesses
-WHERE dbid > 0
-GROUP BY dbid, loginame
 

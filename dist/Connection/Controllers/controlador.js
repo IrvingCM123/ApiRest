@@ -19,30 +19,30 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var verUsuarios = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(req, res) {
-    var pool, result;
+    var Id, pool, result;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            Id = req.params.Id;
+            _context.prev = 1;
+            _context.next = 4;
             return (0, _index.getConnection)();
 
-          case 3:
+          case 4:
             pool = _context.sent;
-            _context.next = 6;
-            return pool.request().query(_index.querys.verUsuarios);
+            _context.next = 7;
+            return pool.request().input("Id", _index.sql.Int, Id).query(_index.querys.EncontrarUsuario);
 
-          case 6:
+          case 7:
             result = _context.sent;
-            console.log(result.recordset);
-            res.json(result);
+            res.send(result.recordset[0]);
             _context.next = 15;
             break;
 
           case 11:
             _context.prev = 11;
-            _context.t0 = _context["catch"](0);
+            _context.t0 = _context["catch"](1);
             res.status(500);
             res.send(_context.t0.message);
 
@@ -51,7 +51,7 @@ var verUsuarios = /*#__PURE__*/function () {
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 11]]);
+    }, _callee, null, [[1, 11]]);
   }));
 
   return function verUsuarios(_x, _x2) {
