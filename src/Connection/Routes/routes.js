@@ -8,6 +8,8 @@ import {
   ActualizarUsuarios,
   AltaInformacion,
   verInformacion,
+  ProbarConexion,
+  enviarCorreo
 } from "../Controllers/controlador.js";
 
 const router = Router();
@@ -16,9 +18,20 @@ router.get("/", function (req, res) {
   console.log("Conectado")
 });
 
+router.get('/hola', function (peticion, respuesta) {
+  let mascota = {
+      nombre: "Maggie",
+      edad: 2,
+  };
+  respuesta.json(mascota);
+});
+
+
 router.get("/Servidor/MostrarUsuarios/", verUsuarios);
 
 router.post("/Servidor/EncontrarUsuario/:Id", EncontrarUsuario);
+
+router.post("/Servidor/enviar",enviarCorreo )
 
 router.get("/Servidor/ContarUsuarios", ContarUsuario);
 

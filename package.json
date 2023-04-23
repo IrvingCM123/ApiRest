@@ -3,21 +3,25 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.mjs",
+  "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js --exec babel-node",
     "build": "babel src -d dist",
-    "start": "node dist"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@angular/forms": "^15.2.8",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
-    "express": "^4.18.1",
+    "express": "^4.18.2",
     "morgan": "^1.10.0",
-    "mssql": "^8.1.1"
+    "mssql": "^8.1.4",
+    "nodemailer": "^6.9.1",
+    "tedious": "^15.1.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",

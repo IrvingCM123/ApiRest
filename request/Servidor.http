@@ -1,5 +1,8 @@
-@api = http://localhost:2000/Servidor
+@api = http://localhost:3000/Servidor
 
+get {{api}}/
+
+###
 get {{api}}/MostrarUsuarios
 
 ###
@@ -15,7 +18,7 @@ Content-Type: application/json
 
 ###
 
-post {{api}}/EncontrarUsuario/2
+get {{api}}/EncontrarUsuario/1
 
 ###
 DELETE  {{api}}/EliminarUsuario/1
